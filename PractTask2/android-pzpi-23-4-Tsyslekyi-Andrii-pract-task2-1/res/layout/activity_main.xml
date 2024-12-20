@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/headerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello, World!"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#4CAF50"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/firstButton"
+        app:layout_constraintVertical_chainStyle="spread"/>
+
+    <Button
+        android:id="@+id/firstButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click Me"
+        android:onClick="onButtonClick"
+        app:layout_constraintTop_toBottomOf="@id/headerText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/imageView"
+        app:layout_constraintVertical_chainStyle="spread"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/turtle"
+        android:scaleType="centerInside"
+        app:layout_constraintTop_toBottomOf="@id/firstButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonContainer"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gridLayout">
+
+        <Button
+            android:id="@+id/secondButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Another Button"
+            android:layout_gravity="right"
+            android:backgroundTint="#FF9800" />
+
+        <Button
+            android:id="@+id/thirdButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Center Button"
+            android:layout_gravity="center"
+            android:backgroundTint="#009688" />
+
+        <Button
+            android:id="@+id/fourthButton"
+            android:layout_height="wrap_content"
+            android:text="Full-width Button"
+            android:layout_width="match_parent"
+            android:backgroundTint="#03A9F4" />
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Press"
+            android:onClick="onGridButtonClick"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/gridText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grid Text"
+            android:textColor="#2196F3"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Press"
+            android:onClick="onGridButtonClick"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/gridImage1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/turtle"
+            android:layout_gravity="center" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Press"
+            android:onClick="onGridButtonClick"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/gridImage2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/turtle"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/gridText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="More Text"
+            android:textColor="#2196F3"
+            android:gravity="center"
+            android:layout_gravity="center" />
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ваш додаток</string>
+    <string name="title">Заголовок</string>
+    <string name="description">Опис</string>
+    <string name="importance">Важливість</string>
+    <string name="select_image">Вибрати зображення</string>
+    <string name="save_note">Зберегти запис</string>
+    <string name="update_note">Оновити запис</string>
+    <string name="add_title">Додати запис</string>
+    <string name="update_title">Оновити запис</string>
+    <string name="delete_note">Видалити запис</string>
+    <string name="add_note">Додати запис</string>
+    <string name="note_image">Зображення запису</string>
+    <string name="date_time">Дата та час</string>
+</resources>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#f0f0f0"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dialog Demo"
+        android:textColor="#333333"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/alertDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Show Alert dialog"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#6200EE"
+        android:padding="16dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progressDialog"/>
+
+    <Button
+        android:id="@+id/progressDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Show Progress dialog"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#3700B3"
+        android:padding="16dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/alertDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dateDialog"/>
+
+    <Button
+        android:id="@+id/dateDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Show Date picker dialog"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#03DAC5"
+        android:padding="16dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/progressDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/timeDialog"/>
+
+    <Button
+        android:id="@+id/timeDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Show Time picker dialog"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#018786"
+        android:padding="16dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/dateDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/customDialog"/>
+
+    <Button
+        android:id="@+id/customDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Show Custom dialog"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#6200EE"
+        android:padding="16dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/timeDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/handlerDialog"/>
+
+    <Button
+        android:id="@+id/handlerDialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Show Handler"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#3700B3"
+        android:padding="16dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/customDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/list"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:listitem="@layout/list_item"
+        tools:itemCount="10"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/handlerDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
