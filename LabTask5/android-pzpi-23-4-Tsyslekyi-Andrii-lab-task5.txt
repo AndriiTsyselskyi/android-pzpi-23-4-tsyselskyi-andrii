@@ -1,0 +1,107 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з лабораторної роботи № 5 з дисципліни
+Програмування під Android
+   
+
+
+
+
+
+Виконав:                                                                           Перевірив:
+ст. гр. ПЗПІ-23-4                        				ст. викладач кафедри ПІ
+Цисельський Андрій						Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+Харків 2024 
+ЗАВДАННЯ
+
+Доповнити завдання №4 наступними функціями:
+реалізувати різне відображення для портретної та ландшафтної орієнтації екрану за допомогою тих самих фрагментів;
+створити дві редаговані теми (тло, гарнітура шрифту, колір тексту тощо) і застосовувати їх в залежності від налаштувань програми.
+додати можливість задавати в налаштуваннях програми розмір шрифту.
+Переробити завдання №4 так, щоб дані нотаток зберігалися у базі даних SQLite
+ 
+ХІД РОБОТИ
+
+Продовжуємо роботу над лабораторною роботою №4. Розпочнемо з першого завдання: створення окремих варіантів відображення для портретної та ландшафтної орієнтації екрана з використанням однакових фрагментів.
+Для цього необхідно відкрити файли розмітки та створити нові фрагменти для відображення списку, а також сторінок додавання і редагування нотаток. Відмінність між вертикальною та горизонтальною орієнтацією полягатиме в розташуванні елементів на екрані.
+Наприклад, на головній сторінці в ландшафтному режимі кнопка додавання буде розміщена в окремій колонці праворуч, тоді як у портретному — знизу. На сторінках додавання та редагування блок для роботи з зображенням буде перенесений до правої колонки.
+Повний код розмітки наведено в [ДОДАТОК А].
+	Перейдемо до другого пункту роботи: редаговані теми. Для цього створимо темну тему. 
+1. <style name="Theme.App.Dark" parent="Theme.AppCompat">
+2. 	<item name="colorPrimary">@color/primary_dark</item>
+3. 	<item name="colorPrimaryDark">@color/primary_dark_dark</item>
+4. 	<item name="colorAccent">@color/accent_dark</item>
+5. 	<item name="android:background">@color/background_dark</item>
+6. 	<item name="android:textColor">@color/text_dark</item>
+7. </style>
+
+Далі зазначимо кольори:
+1. <color name="primary_dark">#BB86FC</color>
+2. <color name="primary_dark_dark">#3700B3</color>
+3. <color name="accent_dark">#03DAC5</color>
+4. <color name="background_dark">#121212</color>
+5. <color name="text_dark">#FFFFFF</color>
+
+	Тепер третій пункт, що треба було додати: можливість задавати в налаштуваннях програми розмір шрифту. 
+Збереження налаштувань шрифту: Ми зберігаєте вибір користувача (чи великий шрифт, чи ні) в SharedPreferences за допомогою змінної isLargeFont. Коли користувач вибирає зміни шрифту в меню, цей параметр змінюється, і застосунок записує нове значення у SharedPreferences:
+1. SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+2. SharedPreferences.Editor editor = preferences.edit();
+3. editor.putBoolean(FONT_SIZE_KEY, isLargeFont);
+4. editor.apply();
+
+Після того як вибір шрифту змінено, викликається метод applyFontSize(), який налаштовує розмір шрифтів для елементів у вашому RecyclerView. В залежності від значення isLargeFont, шрифт буде більший або стандартний:
+1 . private void applyFontSize() {
+2 .     float fontSize = isLargeFont ? 24f : 16f;
+3 . 
+4 .     RecyclerView recyclerView = findViewById(R.id.recyclerView);
+5 .     for (int i = 0; i < recyclerView.getChildCount(); i++) {
+6 .         RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(i);
+7 .         if (holder != null) {
+8 .             TextView title = holder.itemView.findViewById(R.id.title);
+9 .             TextView description = holder.itemView.findViewById(R.id.description);
+10.             if (title != null) title.setTextSize(fontSize);
+11.             if (description != null) description.setTextSize(fontSize);
+12.         }
+13.     }
+14. }
+
+Тепер перейдемо до зберігання даних в базі даних.
+Для цього скористаємося класом DatabaseHelper, що розширює SQLiteOpenHelper. В ньюму прописуємо створення бази та логіку керування даними [ДОДАТОК А]
+Таким чином, всі завдання було виконано.
+ 
+ВИСНОВКИ
+
+	Під час виконання лабораторної роботи я здобув досвід роботи з базою даних SQLite в рамках повноцінного Android проєкту. Я закріпив свої знання з тем і стилів, зокрема у зміні кольорів, шрифтів та інших елементів інтерфейсу по всьому застосунку.
+Посилання на відео-звіт завантажений на YouTube: https://youtu.be/C1AWO7PwU84
+ 
+ВИКОРИСТАНІ ДЖЕРЕЛА
+
+1.	Документація Andoid developers SQLiteDatabase. URL: https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase  (дата звернення: 05.12.2024).
+2.	Документація Andoid developers Save data using SQLite. URL: https://developer.android.com/training/data-storage/sqlite (дата звернення: 05.12.2024).
+3.	Документація JavaRush з роботи з базами даних. URL: https://javarush.com/ua/quests/lectures/ua.questhibernate.level07.lecture00 (дата звернення: 05.12.2024).
+4.	Документація ExamClouds з локалізації в Java. URL: https://www.examclouds.com/java/java-core-russian/internationalisation (дата звернення: 05.12.2024).
+ 
+ДОДАТОК А
+
+Код програми
+Увесь код програми можно знайти за посиланням у GitHub:
+https://github.com/NureTsyselskyiAndrii/android-pzpi-23-4-tsyselskyi-andrii
+
+

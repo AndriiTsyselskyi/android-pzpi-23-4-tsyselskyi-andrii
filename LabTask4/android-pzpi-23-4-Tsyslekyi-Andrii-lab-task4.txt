@@ -1,0 +1,117 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з лабораторної роботи № 4 з дисципліни
+Програмування під Android
+   
+
+
+
+
+
+Виконав:                                                                           Перевірив:
+ст. гр. ПЗПІ-23-4                        				ст. викладач кафедри ПІ
+Цисельський Андрій						Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+Харків 2024 
+ЗАВДАННЯ
+
+Розробити застосунок для ведення нотаток. Застосунок повинен дозволяти переглядати список нотаток, створювати нову нотатку, редагувати нотатку та видаляти нотатку. Кожна нотатка повинна мати назву, опис, важливість (три класи), час і дату призначення і картинку (вибирається з галереї). У списку нотатки відображаються з іконкою з галереї і часом створення (праворуч зверху більш дрібним шрифтом), а також графічним відображенням класу важливості (іконка з множини).
+Потрібно реалізувати функції додавання, видалення, редагування (без збереження між перезапуск додатку) нотаток.
+Видалення/редагування викликаються з контекстного меню при довгому натисненні, додавання - з основного меню в ActionBar. У ActionBar реалізувати пошук / фільтрація заміток за змістом тексту, а також фільтрацію за важливістю. Текстові елементи користувацького інтерфейсу повинні бути локалізовані українською та англійською мовами.
+ 
+ХІД РОБОТИ
+
+Cтворюємо новий проєкт та обираємо Empty Views Activity.
+Починаємо із Налаштування головного екрану та RecyclerView Головна активність (MainActivity) відповідає за відображення списку нотаток та навігацію між екранами. Вона містить:
+•	Ініціалізацію компонентів:
+1. notesRecyclerView = findViewById(R.id.recyclerView);
+2. dbHelper = new DatabaseHelper(this);
+
+•	Встановлення RecyclerView із LinearLayoutManager для вертикального списку.
+•	Підключення адаптера (NoteAdapter) для відображення списку нотаток.
+Далі робимо меню та пошук. Використовується меню (menu_main) з елементами:
+•	Сортування за важливістю та алфавітом:
+1. toggleSortByImportance();
+2. toggleSortByTitle();
+•	Пошук за текстом:
+1. searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { ... });
+
+Далі робимо додавання нової нотатки. Створюємо відповідну розмітку. Перехід до AddNoteActivity виконується кнопкою:
+1. findViewById(R.id.addNoteButton).setOnClickListener(v -> navigateToAddNoteActivity());
+
+Тепер робимо фільтрацію та сортування. Нотатки можна фільтрувати за текстом у назві або описі:
+1. filteredNotes.clear();
+2. for (Note note : allNotes) {
+3.     if (note.getDescription().toLowerCase().contains(query)) {
+4.         filteredNotes.add(note);
+5.     }
+6. }
+
+Також реалізуємо сортування за важливістю та алфавітом:
+1. Collections.sort(targetList, (n1, n2) -> Integer.compare(n1.getImportance(), n2.getImportance()));
+
+Додаємо збереження нотатки з картинкою. AddNoteActivity дозволяє додавати картинку через вибір із галереї:
+1. Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+2. startActivityForResult(intent, PICK_IMAGE_REQUEST);
+
+Обрані зображення зберігаються локально:
+1. Uri saveImageLocally(Uri sourceUri) { ... }
+
+Переходимо до адаптеру для відображення нотаток. NoteAdapter налаштовує вигляд кожного елемента списку. Використовує метод bind для встановлення значень:
+1. holder.title.setText(note.getTitle());
+2. holder.description.setText(note.getDescription());
+3. holder.image.setImageURI(note.getImageUri());
+
+Створимо контекстне меню для редагування та видалення нотаток. Довгий натиск на елемент викликає меню:
+1. PopupMenu popupMenu = new PopupMenu(context, view);
+2. popupMenu.inflate(R.menu.context_menu);
+Дії для редагування та видалення викликаються через інтерфейс:
+1. onNoteClickListener.onEditNoteClick(note, position);
+2. onNoteClickListener.onDeleteNoteClick(note, position);
+
+Збереження даних робимо у базі даних. Клас DatabaseHelper використовується для збереження, видалення та отримання нотаток. Підтримує збереження зображень:
+1. dbHelper.addNote(title, description, importance, dateTime, imageUriString);
+
+Також робимо так щоб наш застосунок підтримував мультимовність через strings.xml:
+1. <string name="app_name">Ваш додаток</string>
+2. <string name="title">Заголовок</string>
+3. <string name="description">Опис</string>
+4. <string name="importance">Важливість</string>
+5. <string name="select_image">Вибрати зображення</string>
+
+Тож, ми розробили повноцінний застосунок, що організований для зручної роботи з нотатками. Він підтримує додавання тексту та картинок, редагування, видалення та сортування. Гнучкий адаптер та інтеграція з базою даних забезпечують динамічне оновлення списку нотаток. [ДОДАТОК А]
+
+	
+
+
+ 
+ВИСНОВКИ
+
+Під час виконання лабораторної роботи я здобув практичні навички зі створення повноцінного проєкту для Android. Я навчився працювати з елементами інтерфейсу, реалізовувати функціональні можливості та налаштовувати локалізацію додатка.
+Посилання на відео-звіт завантажений на YouTube: https://youtu.be/f_7YWOxpu9A
+ 
+ВИКОРИСТАНІ ДЖЕРЕЛА
+
+1.	Документація JavaRush з роботи з базами даних. URL: https://javarush.com/ua/quests/lectures/ua.questhibernate.level07.lecture00 (дата звернення: 04.12.2024)
+2.	Документація ExamClouds з локалізації в Java. URL: https://www.examclouds.com/java/java-core-russian/internationalisation (дата звернення: 04.12.2024) 
+ДОДАТОК А
+
+Код програми
+Увесь код програми можно знайти за посиланням у GitHub:
+https://github.com/NureTsyselskyiAndrii/android-pzpi-23-4-tsyselskyi-andrii

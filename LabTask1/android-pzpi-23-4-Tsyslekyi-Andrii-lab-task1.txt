@@ -1,0 +1,175 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з лабораторної роботи № 1 з дисципліни
+Програмування під Android
+   
+
+
+
+
+
+Виконав:                                                                           Перевірив:
+ст. гр. ПЗПІ-23-4                        				ст. викладач кафедри ПІ
+Цисельський Андрій						Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+Харків 2024 
+ЗАВДВННЯ
+
+Встановити Android Studio та створити мінімальний застосунок для Android. Застосунок повинен містити одну активність (Activity). В активності потрібно реалізувати усі базові методи життєвого циклу активностей. При запуску застосунку у центрі екрану повинен з'являтися напис «Task 1». Для розмітки екрану активності потрібно використати лінійну розмітку (Linear Layout).
+ 
+ХІД РОБОТИ
+
+На першому практичному занятті Android Studio вже була встановлена, тому переходимо до створення простого застосунку. Для цього створюємо новий проєкт і вибираємо шаблон "Empty Views Activity".
+ 	У цьому застосунку з однією активністю [ДОДАТОК А] реалізуємо всі основні методи життєвого циклу активностей: onCreate(), onStart(), onResume(), onPause(), onStop(), onDestroy(), onRestart(). 
+Для зручності можна додати логування:
+1. protected void onStart() {
+2. 	super.onStart();
+3. 	Log.i(ActivityTag, "Activity started");
+4. }
+Переходимо до файлів розмітки. Зазвичай автоматично сформований проєкт має розмітку ConstraintLayout, отже замінюємо згідно із вказівками на LinearLayout і створюємо напис «Task 1»:
+1 . <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+2 .     xmlns:tools="http://schemas.android.com/tools"
+3 .     android:id="@+id/main"
+4 .     android:layout_width="match_parent"
+5 .     android:layout_height="match_parent"
+6 .     android:orientation="vertical"
+7 .     android:gravity="center"
+8 .     tools:context=".MainActivity">
+9 .     <TextView
+10.         android:id="@+id/myTask"
+11.         android:layout_width="wrap_content"
+12.         android:layout_height="wrap_content"
+13.         android:textSize="42sp"
+14.         android:text="Task 1"/>
+15. </LinearLayout> 
+ВИСНОВКИ
+
+Під час лабораторної роботи були закріплені навички налаштування розмітки додатку та роботи з основними методами життєвого циклу активностей.
+Посилання на відеозвіт завантажеий на YouTube. URL: https://youtu.be/h_hnQLd0krQ
+
+ 
+ВИКОРИСТАНІ ДЖЕРЕЛА
+
+1.	DL конспект лекції: Файли розмітки Layout: Файли розмітки Layout. URL: https://dl.nure.ua/mod/page/view.php?id=583066 (дата звернення: 07.11.2024)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК А
+
+Код програми MainActivity.java
+
+package tsyselskyi.andrii.nure;
+
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final String ActivityTag = "ActivityLifecycle";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i(ActivityTag, "Activity created");
+
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+
+        configureInsets();
+    }
+
+    private void configureInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (view, insets) -> {
+            Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(
+                    systemBarsInsets.left,
+                    systemBarsInsets.top,
+                    systemBarsInsets.right,
+                    systemBarsInsets.bottom
+            );
+            return insets;
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(ActivityTag, "Activity started");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(ActivityTag, "Activity resumed");
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i(ActivityTag, "Activity paused");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(ActivityTag, "Activity stopped");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(ActivityTag, "Activity destroyed");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(ActivityTag, "Activity restarted");
+    }
+}
+

@@ -1,0 +1,533 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з практичної роботи № 2 з дисципліни
+Програмування під Android
+   
+
+
+
+
+
+Виконав:                                                                           Перевірив:
+ст. гр. ПЗПІ-23-4                        				ст. викладач кафедри ПІ
+Цисельський Андрій						Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+Харків 2024
+ЗАВДАННЯ
+
+1.	Розмітка екрана
+1.1.	Підготовка робочого середовища
+1.2.	Практика з Linear/Constraint-Layout
+1.3.	Практика з атрибутами елементів
+1.4.	Обробка подій
+2.	Файли розмітки Layout
+2.1.	Створення різних Layout
+2.2.	Практика роботи з атрибутами
+3.	Життєвий цикл та методи Activity
+3.1.	Ознайомлення з життєвим циклом Activity
+3.2.	Дослідження методів життєвого циклу
+3.3.	Вивчення поведінки Activity при зміні орієнтації екрана
+3.4.	Практичне завдання з ручного збереження стану
+3.5.	Дослідження переходу між Activity
+3.6.	Обробка завершення Activity 
+ХІД РОБОТИ
+
+1.	Розмітка екрана
+Відкриваємо Android Studio та створюємо новий проєкт, вибравши шаблон Empty Views Activity. Відкрийте файл res/layout/activity_main.xml. [ДОДАТОК А]
+Практика з LinearLayout: cтворюємо розмітку, що містить кілька кнопок, розташованих одна під одною. Використовуємо властивості orientation для вертикальної орієнтації. Задаємо для кожної кнопки властивості layout_width та layout_height, поекспериментуймо з різними значеннями, як wrap_content та match_parent та властивістю weight.
+Практика з ConstraintLayout: розміщуємо елементи на екрані, використовуючи обмеження для позиціонування (constraints), щоб задати їх взаємне розташування. У моєму випадку я розташовувала інші розмітки усередині цієї розмітки.
+Практика з RelativeLayout: розміщуємо кілька елементів відносно один одного, використовуючи атрибути, такі як layout_below, layout_toRightOf.
+Практика з FrameLayout: додаємо кілька кнопок, щоб побачити, як вони накладаються один на одного.
+Практика з GridLayout: розмістимо 6 кнопок у вигляді таблиці, задаючи кількість стовпців і рядків.
+Використовуємо такі атрибути, як padding, margin, gravity та layout_gravity для налаштування відступів та вирівнювання елементів.	 Налаштовуємо текстові поля.
+
+2.	Обробка подій.
+Додаємо до кнопки обробник події натискання у файлі MainActivity.java.
+1. public void onButtonClick(View v) {
+2. 	Button button = findViewById(R.id.firstButton);
+3. 	button.setText("New Button Text");
+4. }
+5. 
+6. public void onGridButtonClick(View v) {
+7. 	Toast.makeText(getApplicationContext(), "Thank you!", Toast.LENGTH_SHORT).show();
+8. 
+9. }
+
+У файлі activity_main.xml додайте атрибут android:onClick="onButtonClick" та android:onClick="onGridButtonClick" до кнопок, а в класі MainActivity створіть відповідні методи.
+1. android:onClick="onButtonClick"
+2. android:onClick="onGridButtonClick"
+
+3.	Файли розмітки Layout
+LinearLayout: Створіть макет, що містить кнопки, розташовані одна під одною. Експериментуйте з атрибутами gravity і layout_gravity для вирівнювання елементів.
+RelativeLayout: Розмістіть кілька елементів відносно один одного, використовуючи атрибути, такі як layout_below, layout_toRightOf.
+ConstraintLayout: Спробуйте створити складну розмітку з використанням обмежень (constraints). Для цього розташуйте елементи відносно контейнера та один одного.
+FrameLayout: Додайте кілька елементів, щоб побачити, як вони накладаються один на одного.
+GridLayout: Розмістіть текстові поля та кнопки у вигляді таблиці, задаючи кількість стовпців і рядків.
+Досліджуйте додаткові атрибути, такі як padding, margin, textSize, textColor, для налаштування зовнішнього вигляду елементів.
+Використовуйте властивості weight у LinearLayout для рівномірного розподілу простору між елементами. [ДОДАТОК Б]
+4.	Життєвий цикл та методи Activity
+Додаємо до кожного методу життєвого циклу (onCreate, onStart, onResume тощо) логування за допомогою функції Log.d для відстеження порядку їх виклику. Наприклад:
+1.	Log.i(ActivityTag, "Activity started");
+
+Далі змінюємо орієнтацію пристрою з портретної на ландшафтну та аналізуємо виклики методів життєвого циклу у логах. Спостерігаємо, що під час зміни орієнтації Activity перезапускається, проходячи такі методи:
+•	onPause()
+•	onStop()
+•	onDestroy()
+•	onCreate()
+•	onStart()
+•	onResume()
+Додаємо до Activity текстове поле (EditText). Після зміни орієнтації екрана введений текст у цьому полі буде очищено через перезавантаження Activity.
+Проте, якщо присвоїти елементу унікальний ідентифікатор (ID) та додати логіку для збереження стану, дані можна зберегти. Також створюємо лічильник кліків, що зберігає свою кількість навіть після зміни орієнтації екрана.
+1. public void onIncreaseCounter(View v) {
+2. 	String currentCounterText = counterTextView.getText().toString();
+3. 	int counter = TextUtils.isEmpty(currentCounterText) ? 0 : Integer.parseInt(currentCounterText);
+4. 	counterTextView.setText(String.valueOf(counter + 1));
+5. }
+
+Зберігається за допомгою:
+1 . @Override
+2 . protected void onSaveInstanceState(@NonNull Bundle outState) {
+3 . 	super.onSaveInstanceState(outState);
+4 . 
+5 . 	String counter = counterTextView.getText().toString();
+6 . 	String timer = timerTextView.getText().toString();
+7 . 
+8 . 	outState.putString("counter", counter);
+9 . 	outState.putString("timer", timer);
+10. }
+
+Відновлюється за допогою:
+1. @Override
+2. protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) 3. {
+4.  super.onRestoreInstanceState(savedInstanceState); 
+5. 	String counter = savedInstanceState.getString("counter", "0");
+6. 	String timer = savedInstanceState.getString("timer", "0");
+7. counterTextView.setText(counter);
+8. 	timerTextView.setText(timer);
+9. 	}
+
+Створюємо друге Activity у нашому застосунку.
+Додаємо кнопку для переходу до другого Activity.
+Відстежуємо виклики методів життєвого циклу при переході між Activity.
+Додаємо кнопку для завершення Activity (виклик методу finish()).
+1.    public void onFinishClick(View v) { finish(); }
+
+ 
+ВИСНОВКИ
+
+У ході практичної роботи було досліджено процес створення та налаштування різних розміток за допомогою XML-файлів. Вивчено взаємодію компонентів і атрибутів у макетах.
+Також було детально ознайомлено з життєвим циклом компонентів Activity в Android-додатках. Набуто навичок управління станами Activity шляхом використання основних методів життєвого циклу.
+Посилання на відеозвіт завантажений на YouTube. URL: 
+     https://youtu.be/CJmItdymID0
+
+ 
+ВИКОРИСТАНІ ДЖЕРЕЛА
+
+1.	Методичні вказівки до практичних занять: Файли розмітки Layout. URL: https://dl.nure.ua/mod/page/view.php?id=599543 (дата звернення: 01.12.2024)
+2.	Методичні вказівки до практичних занять: Розмітка екрана в Android. URL: https://dl.nure.ua/mod/page/view.php?id=599542 (дата звернення: 01.12.2024)
+3.	Методичні вказівки до практичного заняття: Життєвий цикл та методи Activity. URL: https://dl.nure.ua/mod/page/view.php?id=599544 (дата звернення: 01.12.2024
+ 
+ДОДАТОК А
+
+Файл розмітки.
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/headerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello, World!"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#4CAF50"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/firstButton"
+        app:layout_constraintVertical_chainStyle="spread"/>
+
+    <Button
+        android:id="@+id/firstButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click Me"
+        android:onClick="onButtonClick"
+        app:layout_constraintTop_toBottomOf="@id/headerText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/imageView"
+        app:layout_constraintVertical_chainStyle="spread"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/turtle"
+        android:scaleType="centerInside"
+        app:layout_constraintTop_toBottomOf="@id/firstButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonContainer"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gridLayout">
+
+        <Button
+            android:id="@+id/secondButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Another Button"
+            android:layout_gravity="right"
+            android:backgroundTint="#FF9800" />
+
+        <Button
+            android:id="@+id/thirdButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Center Button"
+            android:layout_gravity="center"
+            android:backgroundTint="#009688" />
+
+        <Button
+            android:id="@+id/fourthButton"
+            android:layout_height="wrap_content"
+            android:text="Full-width Button"
+            android:layout_width="match_parent"
+            android:backgroundTint="#03A9F4" />
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Press"
+            android:onClick="onGridButtonClick"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/gridText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grid Text"
+            android:textColor="#2196F3"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Press"
+            android:onClick="onGridButtonClick"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/gridImage1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/turtle"
+            android:layout_gravity="center" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Press"
+            android:onClick="onGridButtonClick"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/gridImage2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/turtle"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/gridText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="More Text"
+            android:textColor="#2196F3"
+            android:gravity="center"
+            android:layout_gravity="center" />
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК Б
+
+Файл розмітки.
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/ll_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:background="#4CAF50"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tv_header_text"
+            android:text="Welcome"
+            android:textColor="#FFFFFF"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_first"
+            android:text="Click Me"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFC107" />
+
+        <Button
+            android:id="@+id/btn_second"
+            android:text="Another Action"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#8BC34A" />
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:src="@drawable/turtle"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="left" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#FF9800"
+        app:layout_constraintTop_toBottomOf="@id/ll_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tv_rel_title"
+            android:text="Content Section"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_rel_first"
+            android:text="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:layout_toRightOf="@id/tv_rel_title"/>
+
+        <Button
+            android:id="@+id/btn_rel_second"
+            android:text="2"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_rel_title"/>
+
+        <Button
+            android:id="@+id/btn_rel_third"
+            android:text="3"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_rel_title"
+            android:layout_toRightOf="@id/tv_rel_title"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rl_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#E91E63">
+
+        <Button
+            android:id="@+id/btn_footer_first"
+            android:text="3"
+            android:layout_marginStart="260dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF5722" />
+
+        <Button
+            android:id="@+id/btn_footer_second"
+            android:text="4"
+            android:layout_marginStart="210dp"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#795548" />
+    </FrameLayout>
+
+    <GridLayout
+        android:id="@+id/gl_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fl_footer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:columnCount="4"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:rowCount="4"
+        android:background="#009688">
+
+        <Button
+            android:id="@+id/btn_grid_1"
+            android:text="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_2"
+            android:text="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_3"
+            android:text="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_add"
+            android:text="+"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_4"
+            android:text="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_5"
+            android:text="5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_6"
+            android:text="6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_subtract"
+            android:text="-"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_7"
+            android:text="7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_8"
+            android:text="8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_9"
+            android:text="9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_grid_equals"
+            android:text="="
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

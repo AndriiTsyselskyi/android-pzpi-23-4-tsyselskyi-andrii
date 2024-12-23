@@ -1,0 +1,732 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з лабораторної роботи № 3 з дисципліни
+Програмування під Android
+   
+
+
+
+
+
+Виконав:                                                                           Перевірив:
+ст. гр. ПЗПІ-23-4                        				ст. викладач кафедри ПІ
+Цисельський Андрій						Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+
+Харків 2024 
+ЗАВДАННЯ
+
+Розробити калькулятор на 4 базові арифметичні операції з кнопками для введення аргументів і дій.
+Калькулятор повинен мати адаптивний користувацький інтерфейс у різних орієнтаціях екрану та на екранах різної роздільної здатності.
+ 
+ХІД РОБОТИ
+
+Cтворюємо новий проєкт та обираємо Empty Views Activity.
+Спочатку створюємо розмітку для портретної та ландшафтної орієнтацій, щоб забезпечити зручне відображення кнопок та полів введення. Відкриваємо файл activity_main.xml та додаємо компоненти для відображення чисел і операцій.
+Розмітка побудована на базі ConstraintLayout, що дозволяє зручно прив’язувати елементи один до одного. Відображення результату та операції реалізовано через TextView, а для введення чисел використано EditText із атрибутом inputType="phone".
+Поле для виведення результату:
+1 . <TextView
+2 .     android:id="@+id/resultField"
+3 .     android:layout_width="0dp"
+4 .     android:layout_height="wrap_content"
+5 .     android:textSize="20sp"
+6 .     android:gravity="end"
+7 .     android:padding="8dp"
+8 .     app:layout_constraintTop_toTopOf="parent"
+9 .     app:layout_constraintLeft_toLeftOf="parent"
+10.     app:layout_constraintRight_toLeftOf="@+id/operationField" />
+
+Поле для виведення операції:
+1. <TextView
+2.     android:id="@+id/operationField"
+3.     android:layout_width="wrap_content"
+4.     android:layout_height="wrap_content"
+5.     android:textSize="20sp"
+6.     android:gravity="center"
+7.     android:padding="8dp"
+8.     app:layout_constraintTop_toTopOf="parent"
+9.     app:layout_constraintRight_toRightOf="parent" />
+
+Поле для введення чисел:
+1 . <EditText
+2 .     android:id="@+id/numberField"
+3 .     android:layout_width="0dp"
+4 .     android:layout_height="wrap_content"
+5 .     android:inputType="phone"
+6 .     android:textSize="18sp"
+7 .     android:gravity="end"
+8 .     android:padding="8dp"
+9 .     app:layout_constraintTop_toBottomOf="@+id/resultField"
+10.     app:layout_constraintLeft_toLeftOf="parent"
+11.     app:layout_constraintRight_toRightOf="parent" />
+
+Блок кнопок організовано у LinearLayout для кожного ряду. Тож ми отримали гарну та зручну розмітку [ДОДАТОК А].
+Для додаткових операцій додано кнопки "C" та "⌫" для очищення та видалення символів.
+Для ландшафтного відображення будо змінено розположення елементів. Кнопки при ландшафтній орієнтації розташовані справа, а поля результатів зліва [ДОДАТОК Б]. 
+Переходимо до функціональної частини. 
+Першим кроком ініціалізація змінних для збереження поточного числа, операції та результату:
+1. private Double operand = null;
+2. private String lastOperation = "=";
+
+
+Далі йде обробка подій натискання кнопок за допомогою слухачів: 
+1. findViewById(R.id.add).setOnClickListener(view -> handleOperationClick("+"));
+2. findViewById(R.id.sub).setOnClickListener(view -> handleOperationClick("-"));
+Створюємо логіку обробки числових та операційних кнопок та виконання розрахунків залежно від вибраної операції [ДОДАТОК В].
+Всі змінні зберігаються та відновлюються у Bundle за допомогою методів onSaveInstanceState та onRestoreInstanceState.
+Збереження стану:
+1. @Override
+2. protected void onSaveInstanceState(Bundle outState) {
+3.     super.onSaveInstanceState(outState);
+4.     outState.putString("OPERATION", lastOperation);
+5.     if (operand != null) {
+6.         outState.putDouble("OPERAND", operand);
+7.     }
+8. }
+
+Відновлення стану:
+1. @Override
+2. protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+3. 	super.onRestoreInstanceState(savedInstanceState);
+4. 	lastOperation = savedInstanceState.getString("OPERATION");
+5. 	operand = savedInstanceState.getDouble("OPERAND");
+6. 	updateUI();
+7. }
+ 
+ВИСНОВКИ
+
+Під час лабораторної роботи було створено додаток простого калькулятора на 4 базові дії, закріплено знання з обробки подій при використанні кнопок, обчислення записаних з кнопок змінних та відображення результату на екрані.
+Посилання на відеозвіт завантажений на YouTube. URL: https://youtu.be/RowzkaACwXo
+
+ 
+ВИКОРИСТАНІ ДЖЕРЕЛА
+
+1.	Документація JavaRush switch-case. URL: https://javarush.com/en/groups/posts/en..switch-statement-in-java  (дата звернення: 27.11.2024)
+2.	Документація JavaRush replacing strings in java. URL: https://javarush.com/en/groups/posts/en.2845.replace-string-in-java (дата звернення: 27.11.2024)
+ 
+ДОДАТОК А
+
+Файл портретної орієнтації.
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/resultField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="end"
+        android:padding="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/operationField" />
+
+    <TextView
+        android:id="@+id/operationField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:padding="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/numberField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:textSize="18sp"
+        android:gravity="end"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/resultField"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/firstButtonPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/numberField"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/n7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/n8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/n9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="9" />
+
+        <Button
+            android:id="@+id/div"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="/" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/secondButtonPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/firstButtonPanel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/n4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/n5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/n6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/mul"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="*" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/thirdButtonPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/secondButtonPanel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/n1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/n2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/n3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/sub"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="-" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fourthButtonPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/thirdButtonPanel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/n0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/comma"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="," />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+" />
+
+        <Button
+            android:id="@+id/eq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="=" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/additionalButtonPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/fourthButtonPanel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="C" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="⌫" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК Б
+
+Файл ландшафтної розмітки
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/topPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/buttonPanel"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/resultField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:gravity="end"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/operationField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:padding="8dp" />
+
+        <EditText
+            android:id="@+id/numberField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:padding="8dp" />
+
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:columnCount="4"
+        android:rowCount="5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/topPanel"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/n7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/n8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/n9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="9" />
+
+        <Button
+            android:id="@+id/div"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="/" />
+
+        <Button
+            android:id="@+id/n4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/n5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/n6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/mul"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="*" />
+
+        <Button
+            android:id="@+id/n1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/n2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/n3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/sub"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="-" />
+
+        <Button
+            android:id="@+id/n0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/comma"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="," />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="+" />
+
+        <Button
+            android:id="@+id/eq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="=" />
+
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="C" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="\u232b" />
+
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК В
+
+Файл функціональної частини MainActivity
+
+package tsyselskyi.andrii.nure;
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    private TextView resultField;
+    private EditText numberField;
+    private TextView operationField;
+
+    private Double operand = null;
+    private String lastOperation = "=";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        initializeViews();
+        setupListeners();
+    }
+
+    private void initializeViews() {
+        resultField = findViewById(R.id.resultField);
+        numberField = findViewById(R.id.numberField);
+        operationField = findViewById(R.id.operationField);
+    }
+
+    private void setupListeners() {
+        setOperationListeners();
+        setNumberListeners();
+        findViewById(R.id.clear).setOnClickListener(view -> handleClearClick());
+        findViewById(R.id.delete).setOnClickListener(view -> handleDeleteClick());
+    }
+
+    private void setOperationListeners() {
+        findViewById(R.id.add).setOnClickListener(view -> handleOperationClick("+"));
+        findViewById(R.id.sub).setOnClickListener(view -> handleOperationClick("-"));
+        findViewById(R.id.mul).setOnClickListener(view -> handleOperationClick("*"));
+        findViewById(R.id.div).setOnClickListener(view -> handleOperationClick("/"));
+        findViewById(R.id.eq).setOnClickListener(view -> handleOperationClick("="));
+    }
+
+    private void setNumberListeners() {
+        int[] numberButtons = {
+                R.id.n0, R.id.n1, R.id.n2, R.id.n3, R.id.n4,
+                R.id.n5, R.id.n6, R.id.n7, R.id.n8, R.id.n9, R.id.comma
+        };
+
+        for (int id : numberButtons) {
+            findViewById(id).setOnClickListener(view -> handleNumberClick(((Button) view).getText().toString()));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("OPERATION", lastOperation);
+        if (operand != null) {
+            outState.putDouble("OPERAND", operand);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        lastOperation = savedInstanceState.getString("OPERATION");
+        operand = savedInstanceState.getDouble("OPERAND");
+        updateUI();
+    }
+
+    private void handleNumberClick(String number) {
+        numberField.append(number);
+        if ("=".equals(lastOperation) && operand != null) {
+            operand = null;
+        }
+    }
+
+    private void handleOperationClick(String operation) {
+        String numberInput = numberField.getText().toString();
+
+        if (!TextUtils.isEmpty(numberInput)) {
+            numberInput = numberInput.replace(',', '.');
+            try {
+                performCalculation(Double.valueOf(numberInput), operation);
+            } catch (NumberFormatException e) {
+                numberField.setText("");
+            }
+        }
+
+        lastOperation = operation;
+        operationField.setText(lastOperation);
+    }
+
+    private void performCalculation(Double number, String operation) {
+        if (operand == null) {
+            operand = number;
+        } else {
+            if ("=".equals(lastOperation)) {
+                lastOperation = operation;
+            }
+
+            switch (lastOperation) {
+                case "=":
+                    operand = number;
+                    break;
+                case "/":
+                    operand = (number == 0) ? 0.0 : operand / number;
+                    break;
+                case "*":
+                    operand *= number;
+                    break;
+                case "+":
+                    operand += number;
+                    break;
+                case "-":
+                    operand -= number;
+                    break;
+            }
+        }
+
+        updateUI();
+        numberField.setText("");
+    }
+
+    private void updateUI() {
+        if (operand != null) {
+            resultField.setText(operand.toString().replace('.', ','));
+        }
+        operationField.setText(lastOperation);
+    }
+
+    private void handleClearClick() {
+        operand = null;
+        lastOperation = "=";
+        numberField.setText("");
+        resultField.setText("");
+        operationField.setText("");
+    }
+
+    private void handleDeleteClick() {
+        String currentInput = numberField.getText().toString();
+        if (!TextUtils.isEmpty(currentInput)) {
+            numberField.setText(currentInput.substring(0, currentInput.length() - 1));
+        }
+    }
+}
+

@@ -1,0 +1,170 @@
+МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ
+ХАРКІВСЬКИЙ НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ РАДІОЕЛЕКТРОНІКИ
+
+
+КАФЕДРА ПРОГРАМНОЇ ІНЖЕНЕРІЇ
+
+
+
+
+Звіт
+з практичної роботи № 1 з дисципліни
+Програмування під Android
+   
+
+
+
+
+
+
+Виконав:                                                                         	Перевірив:
+ст. гр. ПЗПІ-23-4                        				ст. викладач кафедри ПІ
+Цисельський Андрій						Сокорчук Ігор Петрович
+
+
+
+
+
+
+
+
+Харків 2024
+Завдання
+
+1.	Встановлення Android Studio
+1.1.	Завантаження Android Studio
+1.2.	Встановлення Android Studio
+1.3.	Налаштування Android Studio після встановлення
+1.4.	Налаштування емулятора Android
+2.	Створення мінімального Android застосунку
+1.1.	Створення нового Android проєкту
+1.2.	Ознайомлення зі структурою проєкту
+1.3.	Налаштування емулятора або підключення фізичного пристрою
+1.4.	Запуск мінімального застосунку
+1.5.	Внесення змін до інтерфейсу
+1.6.	Взаємодія з інтерфейсом
+3.	Створення GitHub репозиторію та публікація коду застосунку
+1.1.	Налаштування Git в Android Studio
+1.1.	Створення нового GitHub репозиторію
+1.2.	Публікація коду застосунку на GitHub
+1.3.	Перевірка репозиторію на GitHub
+1.4.	Додавання змін до репозиторію
+
+
+
+
+
+
+
+
+ 
+Хід роботи
+
+1.	Встановлення Android Studio
+Відвідайте офіційний вебсайт Android Studio та завантажте останню версію Android Studio, яка відповідає вашій операційній системі (Windows, macOS або Linux). Ознайомтеся з системними вимогами Android Studio. Перевірте наявність на вашому комп’ютері необхідних ресурсів (процесор, оперативна пам'ять, вільне місце на диску).
+Запустіть інсталяційний файл Android Studio. Слідуйте покроковим інструкціям майстра встановлення: - Погодьтеся з умовами ліцензії. - Виберіть компоненти для встановлення (Android SDK, Android Virtual Device (AVD) Manager). - Вкажіть директорію для встановлення програми та SDK.. Завершіть встановлення, дочекайтеся завантаження та налаштування Android SDK. 
+Після першого запуску Android Studio майстер налаштувань запропонує налаштувати параметри: - Виберіть тип інтерфейсу (стандартний або темний). - Перевірте оновлення компонентів Android SDK. - Налаштуйте емулятори Android (Android Virtual Device Manager).Створіть новий проект, щоб перевірити, чи працюють усі компоненти належним чином: - Виберіть тип проекту (Empty Activity). - Встановіть мінімальну версію Android SDK для свого проекту. 
+Запустіть Android Virtual Device Manager для створення віртуального пристрою Android: - Виберіть тип пристрою (телефон, планшет або інший). - Виберіть версію Android для емулятора. - Налаштуйте інші параметри (розмір екрану, обсяг пам’яті).  Запустіть емулятор і перевірте його роботу.
+
+2.	Створення мінімального Android застосунку
+Відкрийте Android Studio та натисніть на кнопку New -> New Project. 
+Оберіть Empty Views Activity, до неї придумайте назву програми та папки, оберіть шлях збереження. Оберіть мову Java та відповідні конфігурації.
+Відкрийте файл activity_main.xml у редакторі та додайте новий елемент інтерфейсу [ДОДАТОК А]
+
+У файлі MainActivity.java додайте обробку натискання на кнопку: - Знайдіть кнопку за її ідентифікатором за допомогою методу findViewById(). Додайте обробник натискання за допомогою методу setOnClickListener(), що змінюватиме текст на кнопці:
+1. Button btn1 = findViewById(R.id.pressBtn);
+2. TextView txt = findViewById(R.id.txt1);
+3. EditText editTxt = findViewById(R.id.editText);
+4. btn1.setOnClickListener(new View.OnClickListener(){
+5.	 @Override
+6.	 public void onClick(View v) {
+7.	 	txt.setText(editTxt.getText());
+8.	 }
+9. });
+
+3.	Створення GitHub репозиторію та публікація коду застосунку
+Перейдіть на GitHub та створіть свій акаунт згідно із вимогами. Відкрийте ваш Android-застосунок в Android Studio. Ініціалізуйте Git у вашому проєкті: Відкрийте VCS -> Enable Version Control Integration. У випадаючому меню оберіть Git.
+Опублікуйте проєкт на GitHub: Оберіть VCS -> Git -> Push. Перевірте, чи всі файли вибрані для публікації, та натисніть Push.
+Після успішного виконання команд перейдіть до вашого GitHub репозиторію в браузері. Переконайтеся, що ваш застосунок з'явився в репозиторії, і всі файли доступні. 
+Висновки
+
+У результаті виконання практичного завдання був розроблений базовий Android застосунок. Головною метою роботи було ознайомлення з середовищем Android Studio та основними принципами створення мобільних додатків.
+Під час розробки проекту була вивчена структура Android застосунку. Зокрема, реалізовано обробник подій для кнопки, що дозволяє змінювати текст у текстовому полі.
+Завдяки виконанню цього завдання вдалося ознайомитися з основами програмування для Android, а також отримати практичний досвід у створенні та налагодженні мобільних додатків.
+Посилання на відеозвіт опублікований на YouTube. URL: https://youtu.be/oYecS-6OVQc
+  
+Використані джерела
+
+1.	Методичні вказівки до практичних занять: Створення мінімального Android застосунку. URL: https://dl.nure.ua/mod/page/view.php?id=599539 (дата звернення: 01.11.2024)
+2.	Методичні вказівки до практичних занять: Встановлення Android Studio. URL: https://dl.nure.ua/mod/page/view.php?id=599540 (дата звернення: 01.11.2024)
+3.	Методичні вказівки до практичних занять: Створення GitHub репозиторію та публікація коду застосунку. URL: https://dl.nure.ua/mod/page/view.php?id=599541 (дата звернення: 01.11.2024)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ДОДАТОК А
+
+Файл розмітки.
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/txt1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.537" />
+
+    <Button
+        android:id="@+id/pressBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:insetLeft="4dp"
+        android:insetRight="4dp"
+        android:text="Press me"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt1" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_light"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Andrew Tsyselkyi"
+        app:layout_constraintBottom_toTopOf="@+id/txt1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
